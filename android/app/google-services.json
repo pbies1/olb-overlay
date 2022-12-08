@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "754419896031",
+    "project_id": "cards-ics3u",
+    "storage_bucket": "cards-ics3u.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:754419896031:android:23cbafc46682cde516636a",
+        "android_client_info": {
+          "package_name": "com.example.hello_world"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "754419896031-pivge1hd35etrth4m23bgei3h3ptkac9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdwp78H3bvv7rgk86KEojP0C3GicEthFI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "754419896031-pivge1hd35etrth4m23bgei3h3ptkac9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "754419896031-8ihhe62k3itfo7ipphcridbmqtf8c5im.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.helloWorld"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:754419896031:android:5cefd9daa3850def16636a",
+        "android_client_info": {
+          "package_name": "com.example.overlay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "754419896031-pivge1hd35etrth4m23bgei3h3ptkac9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdwp78H3bvv7rgk86KEojP0C3GicEthFI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "754419896031-pivge1hd35etrth4m23bgei3h3ptkac9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "754419896031-8ihhe62k3itfo7ipphcridbmqtf8c5im.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.helloWorld"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

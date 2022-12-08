@@ -5,8 +5,15 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-void main() => runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -37,37 +44,34 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter2 = 0;
-  int _counter = 0;
-  final borderRadius = BorderRadius.circular(20);
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  void _incrementCounter2() {
-    setState(() {
-      _counter--;
-    });
-  }
-
-  void _incrementCounter3() {
-    setState(() {
-      _counter2++;
-    });
-  }
-
-  void _incrementCounter4() {
-    setState(() {
-      _counter2--;
-    });
-  }
+  late int _counter1;
+  late int _counter2;
+  late Stream<DocumentSnapshot<Map<String, dynamic>>> docRef;
 
   @override
+  void initState() {
+    super.initState();
+    docRef = FirebaseFirestore.instance
+        .collection("counters")
+        .doc("counter")
+        .snapshots();
+
+    _counter1 = 0;
+    _counter2 = 0;
+  }
+
+  final borderRadius = BorderRadius.circular(20);
+  @override
   Widget build(BuildContext context) {
+    docRef.listen((event) {
+      setState(() {
+        _counter1 = event.data()?['c1'];
+        _counter2 = event.data()?['c2'];
+      });
+    });
+
     return Scaffold(
-        backgroundColor: Color.fromARGB(255, 37, 37, 37),
+        backgroundColor: const Color.fromARGB(255, 37, 37, 37),
         body: SizedBox(
           child: Row(
             children: [
@@ -94,12 +98,25 @@ class _MyHomePageState extends State<MyHomePage> {
                                 'assets/images/OLB_scorecardv2.png')),
                         Container(
                           decoration: BoxDecoration(
-                            border: Border.all(
-                                width: 1, color: Color.fromARGB(255, 0, 0, 0)),
-                            color: const Color.fromARGB(255, 37, 37, 37),
-                          ),
+                              border: Border.all(color: Colors.black),
+                              gradient: const LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                stops: [
+                                  0.05,
+                                  0.3,
+                                  0.7,
+                                  1.0,
+                                ],
+                                colors: [
+                                  Color.fromARGB(255, 10, 10, 10),
+                                  Color.fromARGB(255, 37, 37, 37),
+                                  Color.fromARGB(255, 37, 37, 37),
+                                  Color.fromARGB(255, 15, 15, 15),
+                                ],
+                              )),
                           child: Text(
-                            '$_counter',
+                            '$_counter1',
                             style: const TextStyle(
                                 color: Color.fromARGB(255, 255, 255, 255),
                                 fontSize: 130.5),
@@ -113,38 +130,74 @@ class _MyHomePageState extends State<MyHomePage> {
                     children: [
                       SizedBox(
                         width: 279,
-                        child: ElevatedButton(
-                            onPressed: _incrementCounter,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                              gradient: const LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                stops: [
+                                  0.05,
+                                  0.5,
+                                  0.6,
+                                  1.0,
+                                ],
+                                colors: [
+                                  Color.fromARGB(255, 20, 20, 20),
+                                  Color.fromARGB(255, 37, 37, 37),
+                                  Color.fromARGB(255, 37, 37, 37),
+                                  Color.fromARGB(255, 20, 20, 20),
+                                ],
+                              )),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              FirebaseFirestore.instance
+                                  .collection('counters')
+                                  .doc('counter')
+                                  .set({'c1': _counter1 + 1, 'c2': _counter2});
+                            },
                             child: const Icon(Icons.add, color: Colors.white),
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    const Color.fromARGB(255, 37, 37, 37)),
-                                shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                    const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.zero,
-                                        side: BorderSide(
-                                            
-                                            color: Color.fromARGB(
-                                                255, 0, 0, 0)))))),
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.transparent,
+                                shadowColor: Colors.transparent),
+                          ),
+                        ),
                       ),
                       SizedBox(
                         width: 279,
-                        child: ElevatedButton(
-                            onPressed: _incrementCounter2,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                              gradient: const LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                stops: [
+                                  0.05,
+                                  0.5,
+                                  0.6,
+                                  1.0,
+                                ],
+                                colors: [
+                                  Color.fromARGB(255, 20, 20, 20),
+                                  Color.fromARGB(255, 37, 37, 37),
+                                  Color.fromARGB(255, 37, 37, 37),
+                                  Color.fromARGB(255, 20, 20, 20),
+                                ],
+                              )),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              FirebaseFirestore.instance
+                                  .collection('counters')
+                                  .doc('counter')
+                                  .set({'c1': _counter1 - 1, 'c2': _counter2});
+                            },
                             child:
                                 const Icon(Icons.remove, color: Colors.white),
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    const Color.fromARGB(255, 37, 37, 37)),
-                                shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                    const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.zero,
-                                        side: BorderSide(
-                                           
-                                            color: Color.fromARGB(
-                                                255, 0, 0, 0)))))),
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.transparent,
+                                shadowColor: Colors.transparent),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -172,10 +225,23 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         Container(
                           decoration: BoxDecoration(
-                            border: Border.all(
-                                width: 1, color: Color.fromARGB(255, 0, 0, 0)),
-                            color: const Color.fromARGB(255, 37, 37, 37),
-                          ),
+                              border: Border.all(color: Colors.black),
+                              gradient: const LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                stops: [
+                                  0.05,
+                                  0.3,
+                                  0.7,
+                                  1.0,
+                                ],
+                                colors: [
+                                  Color.fromARGB(255, 10, 10, 10),
+                                  Color.fromARGB(255, 37, 37, 37),
+                                  Color.fromARGB(255, 37, 37, 37),
+                                  Color.fromARGB(255, 10, 10, 10),
+                                ],
+                              )),
                           child: Text(
                             '$_counter2',
                             style: const TextStyle(
@@ -191,40 +257,76 @@ class _MyHomePageState extends State<MyHomePage> {
                     children: [
                       SizedBox(
                         width: 279,
-                        child: ElevatedButton(
-                            onPressed: _incrementCounter3,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                              gradient: const LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                stops: [
+                                  0.05,
+                                  0.5,
+                                  0.6,
+                                  1.0,
+                                ],
+                                colors: [
+                                  Color.fromARGB(255, 20, 20, 20),
+                                  Color.fromARGB(255, 37, 37, 37),
+                                  Color.fromARGB(255, 37, 37, 37),
+                                  Color.fromARGB(255, 20, 20, 20),
+                                ],
+                              )),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              FirebaseFirestore.instance
+                                  .collection('counters')
+                                  .doc('counter')
+                                  .set({'c1': _counter1, 'c2': _counter2 + 1});
+                            },
                             child: const Icon(Icons.add, color: Colors.white),
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    const Color.fromARGB(255, 37, 37, 37)),
-                                shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                    const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.zero,
-                                        side: BorderSide(
-                                            
-                                            color: Color.fromARGB(
-                                                255, 0, 0, 0)))))),
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.transparent,
+                                shadowColor: Colors.transparent),
+                          ),
+                        ),
                       ),
                       SizedBox(
                         width: 279,
-                        child: ElevatedButton(
-                            onPressed: _incrementCounter4,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                              gradient: const LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                stops: [
+                                  0.05,
+                                  0.5,
+                                  0.6,
+                                  1.0,
+                                ],
+                                colors: [
+                                  Color.fromARGB(255, 20, 20, 20),
+                                  Color.fromARGB(255, 37, 37, 37),
+                                  Color.fromARGB(255, 37, 37, 37),
+                                  Color.fromARGB(255, 20, 20, 20),
+                                ],
+                              )),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              FirebaseFirestore.instance
+                                  .collection('counters')
+                                  .doc('counter')
+                                  .set({'c1': _counter1, 'c2': _counter2 - 1});
+                            },
                             child: const Icon(
                               Icons.remove,
                               color: Colors.white,
                             ),
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    const Color.fromARGB(255, 37, 37, 37)),
-                                shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                    const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.zero,
-                                        side: BorderSide(
-                                           
-                                            color: Color.fromARGB(
-                                                255, 0, 0, 0)))))),
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.transparent,
+                                shadowColor: Colors.transparent),
+                          ),
+                        ),
                       ),
                     ],
                   ),
